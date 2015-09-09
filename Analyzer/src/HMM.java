@@ -22,9 +22,9 @@ public class HMM {
     double [] initialMatrix = new double [countOfState];
     double [][] stateTransitionMatrix = new double [countOfState][countOfState];
     double [][] observaMatrix = new double [countOfState][countOfChineseWords];
-	String trainingSetPath = "trainingSet/msr_training.txt";
-    String dataPath = "trainingSet/data.txt";
-    String matrixDataFile = "data/matrixData.txt";
+	String trainingSetPath = "C:/Users/geteway/Documents/GitHub/ChineseSegmentation/trainingSet/msr_training.txt";
+    String dataPath = "C:/Users/geteway/Documents/GitHub/ChineseSegmentation/trainingSet/data.txt";
+    String matrixDataFile = "C:/Users/geteway/Documents/GitHub/ChineseSegmentation/data/matrixData.txt";
     
     
 	public void txtPretreatment () throws Exception {
@@ -34,6 +34,7 @@ public class HMM {
 		// at least,create the label and rebuilt the String
 		File trainingSetFile = new File(trainingSetPath);
 		File outputFile = new File(dataPath);
+		System.out.println("for outputFile:"+outputFile);
 		PrintWriter output = new PrintWriter(outputFile);
 		Scanner input = new Scanner(trainingSetFile);
 		System.out.println("Read File address = "+trainingSetPath);
@@ -121,7 +122,7 @@ public class HMM {
 				if (label.charAt(i) == 'E') countE ++;
 				if (label.charAt(i) == 'M') countM ++;
 				if (label.charAt(i) == 'S') countS ++;
-			}   countE --;
+			}   //countE --;  // why ?
 		    
 			for (int i = 0 ; i<label.length(); i++) {
 				// for initialMatrix
@@ -212,7 +213,7 @@ public class HMM {
 			else if (i == 3) count = countS;
 			else {System.out.println("wrong for stateTransitionMatrix,will divide zero");}
 			for (int j=0 ; j<stateTransitionMatrix[i].length; j++) {
-				stateTransitionMatrix[i][j] = Math.exp(stateTransitionMatrix[i][j]/count);
+				//stateTransitionMatrix[i][j] = Math.exp(stateTransitionMatrix[i][j]/count);
 			}
 		}
 		
@@ -439,18 +440,18 @@ public class HMM {
 		// Main method: just test the HMM class.
     	
         HMM myHMM = new HMM();
-        //myHMM.txtPretreatment();
-        //myHMM.training(); 
+        myHMM.txtPretreatment();
+        myHMM.training(); 
         
-        //myHMM.saveData();
-        //myHMM.loadData();
+        myHMM.saveData();
+        myHMM.loadData();
         //System.out.println("go~~~~");
-        String str = ""; // test String
+        String str = "中国共产党"; // test String
         System.out.println(str);
         String ans = myHMM.segmentation(str);
         //print answer
         System.out.println(ans); 
-        System.out.println("SystemTime = "+System.currentTimeMillis());
+        System.out.println("The End. SystemTime = "+System.currentTimeMillis());
 	}
 
 }

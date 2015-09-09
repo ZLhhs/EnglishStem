@@ -38,7 +38,7 @@ public class Analyzer {
 				continue;
 			//System.out.println(strList[i]);
 			keyWord += (divideToCNEN(strList[i])+" ");
-			System.out.println("in splitAndDivide,keyWord="+keyWord);
+			//System.out.println("in splitAndDivide,keyWord="+keyWord);
 			//break;
 		}
 		//System.out.println("end for splitAndDivide,keyWord="+keyWord);
@@ -56,11 +56,11 @@ public class Analyzer {
 		}
 		String CN = String.valueOf(strCNList);
 		String EN = String.valueOf(strENList);
-		System.out.println("in divideToCNEN,cn="+CN+" en="+EN);
+		//System.out.println("in divideToCNEN,cn="+CN+" en="+EN);
 		return CN+" "+EN;
 	}
 	
-	public String process (String keyWord, HMM myHMM, Stemmer myStemmer) {
+	public String process (String keyWord, dictionarySegmentation CNCut, Stemmer myStemmer) {
 		String [] keyWordList = keyWord.split(" ");
 		String answer = "";
 		for (int i = 0 ; i<keyWordList.length; i++) {
@@ -69,33 +69,37 @@ public class Analyzer {
 				continue;
 			else if ((int)target.charAt(0)<=40869 && (int)target.charAt(0)>=19968) {
 				// CN
-				String str = myHMM.segmentation(target);
+				String str = CNCut.segmentation(new StringBuffer(target));
 				answer += (str+" ");
 			}
-			else { 
+			else { //EN
 				char [] charList = target.toLowerCase().toCharArray();
 			    for (int j = 0 ; j<charList.length; j++)
 			    	myStemmer.add(charList[j]);
 			    myStemmer.stem();
 			    answer += (myStemmer.toString()+" ");
 			}
-			System.out.println("in processfunction:"+answer);
+			//System.out.println("in processfunction:"+answer);
 			//break;
 		}
 		return answer.trim();
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
         Analyzer myAnalyzer = new Analyzer();
-        HMM myHMM = new HMM();
+        //HMM myHMM = new HMM();
+        //myHMM.loadData();
+        dictionarySegmentation CNCut = new dictionarySegmentation();
+        CNCut.loadDict();
         Stemmer myStemmer = new Stemmer();
-        String str1 = "刚刚得到最新消息：校招薪资一律降低为10K，等级为P5。Lucy开会时已经明确表示，明年校招名额会卡得很严，全集团加蚂蚁、菜鸟总名额为400人；同时加大对现有老白兔的淘汰力度。";
+        String str1 = "有帖子估算过 MC 里面每个 Chunk 平均大小是 5KB，所以 30M × 30M 的「完整世界」的大小大概是 17.6PB。嗯，比不上 SOS 团的 logo。";
+        System.out.println("待分词字符串："+str1);
         String str2 = myAnalyzer.filter(str1);
         String  keyWord ;
         keyWord = myAnalyzer.splitAndDivide(str2);
-        String answer = myAnalyzer.process(keyWord, myHMM, myStemmer);
+        String answer = myAnalyzer.process(keyWord, CNCut, myStemmer);
         System.out.println(answer);
         String [] keyWordList = answer.trim().split(" ");
         for (int i = 0 ; i<keyWordList.length; i++) {
