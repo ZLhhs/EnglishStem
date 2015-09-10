@@ -13,7 +13,7 @@ public class HMM {
 	 * the training dataSet is in the "trainingSet" folder.
 	 * we use training dataSet to create the HMM and then use HMM to do 
 	 * Chinese segmentation. See "ChineseSegmentation.doc" in this project
-	 * for more information about class and method.
+	 * for more information about this class and method.
 	 */
 	
 	int countOfChineseWords = 40870; // Chinese in unicode is from 19968 to 40869
